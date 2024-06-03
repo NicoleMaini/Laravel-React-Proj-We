@@ -36,7 +36,7 @@ class CustomerController extends Controller
         $pivot = $customer_id->courses()->where('course_id', $course_id)->first()->pivot;
         $pivot->status = $newStatus;
         $pivot->save();
-
+        hfiohhefhsdllsflksdfjs;
         return $pivot;
     }
 }
