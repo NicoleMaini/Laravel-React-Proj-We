@@ -26,9 +26,9 @@ Route::name('api.v1.')
         Route::resource('/slots', SlotController::class);
         Route::resource('/courses', CourseController::class);
         Route::get('/costumer-dashboard', [CustomerController::class, 'customerDashboard']);
-        // Route::put('/costumer-dashboard-requiered/{id}', [CustomerController::class, 'customerRequired']);
-        // Route::put('/costumer-dashboard-cancel/{id}', [CustomerController::class, 'customerCancel']);
+        Route::put('/costumer-dashboard-requiered/{id}', [CustomerController::class, 'customerRequired']);
+        Route::put('/costumer-dashboard-cancel/{id}', [CustomerController::class, 'customerCancel']);
         Route::get('/admin-dashboard', [AdminController::class, 'adminDashboard']);
-        //     Route::put('/admin-dashboard-accept/{id}', [AdminController::class, 'adminAccept']);
-        //     Route::put('/admin-dashboard-reject/{id}', [AdminController::class, 'adminReject']);
+        Route::put('/admin-dashboard-accept/customer{customer_id}/course{course_id}', [AdminController::class, 'adminAccept']);
+        Route::put('/admin-dashboard-reject/customer{customer_id}/course{course_id}', [AdminController::class, 'adminReject']);
     });

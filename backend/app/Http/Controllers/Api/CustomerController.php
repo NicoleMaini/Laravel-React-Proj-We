@@ -27,16 +27,32 @@ class CustomerController extends Controller
         if (Auth::user()->role !== 'customer') {
             abort(401);
         }
-
-        // $customer_id = Auth::user;
-        // $course_id = $id; // ID del corso che vuoi aggiornare
-        $customer_id = User::find(1);
-        $course_id = 2;
+        // $customer_id = User::find(1);
+        // $course_id = 2;
+        $customer = Auth::user();
+        $course_id = $id; // ID del corso che vuoi aggiornare
         $newStatus = 'pending';
-        $pivot = $customer_id->courses()->where('course_id', $course_id)->first()->pivot;
+        $pivot = $customer->courses()->where('course_id', $course_id)->first()->pivot;
         $pivot->status = $newStatus;
         $pivot->save();
-        hfiohhefhsdllsflksdfjs;
+
+        return $pivot;
+    }
+
+    public function customerCancel($id)
+    {
+        if (Auth::user()->role !== 'customer') {
+            abort(401);
+        }
+        // $customer_id = User::find(1);
+        // $course_id = 2;
+        $customer = Auth::user();
+        $course_id = $id; // ID del corso che vuoi aggiornare
+        $newStatus = 'false';
+        $pivot = $customer->courses()->where('course_id', $course_id)->first()->pivot;
+        $pivot->status = $newStatus;
+        $pivot->save();
+
         return $pivot;
     }
 }
