@@ -25,6 +25,7 @@ class AdminController extends Controller
                 },
             ])
             ->get();
+
         $result = $courses->map(function ($user) {
             return [
                 'id' => $user->id,
@@ -45,42 +46,25 @@ class AdminController extends Controller
                             ];
                         } else {
                             // Nel caso in cui l'istanza di Activity non sia stata trovata
-                            return null; // o un valore di default a tua scelta
+                            return [
+                                'id' => $course->id,
+                                'status' => $course->pivot->status,
+                            ];
                         }
                     })
                     ->filter(), // Rimuovi eventuali valori null dalla mappatura dei corsi
             ];
         });
 
-        // Trasforma i risultati per includere `status` direttamente
-        // $result = $courses->map(function ($user) {
-        //     return [
-        //         'id' => $user->id,
-        //         'name' => $user->name,
-        //         'genre' => $user->genre,
-        //         'telephone' => $user->telephone,
-        //         'email' => $user->email,
-        //         'courses' => $user->courses->map(function ($course) {
-        // return [
-        //     'id' => $course->id,
-        //     'name' => Activity::with('courses', 'courses.slot')->find($course->id),
-        //     'status' => $course->pivot->status,
-        // ];
-
-        //     }),
-        // ];
-        // });
-
         return json_encode($result, JSON_PRETTY_PRINT);
     }
+
     public function adminAccept($customer_id, $course_id)
     {
         if (Auth::user()->role !== 'admin') {
             abort(401);
         }
 
-        // $customer = User::find(1);
-        // $course_id = 2;
         $customer = User::find($customer_id);
         if (!$customer) {
             // Gestione dell'errore se l'utente non viene trovato

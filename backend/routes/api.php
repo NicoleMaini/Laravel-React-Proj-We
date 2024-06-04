@@ -22,13 +22,17 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 Route::name('api.v1.')
     ->prefix('v1') // un perfisso, che serve per tenere conto delle versioni che si useranno all'oggiornarsi della api
     ->group(function () {
-        Route::resource('/activities', ActivityController::class);
-        Route::resource('/slots', SlotController::class);
-        Route::resource('/courses', CourseController::class);
-        Route::get('/costumer-dashboard', [CustomerController::class, 'customerDashboard']);
-        Route::put('/costumer-dashboard-requiered/{id}', [CustomerController::class, 'customerRequired']);
-        Route::put('/costumer-dashboard-cancel/{id}', [CustomerController::class, 'customerCancel']);
-        Route::get('/admin-dashboard', [AdminController::class, 'adminDashboard']);
-        Route::put('/admin-dashboard-accept/customer{customer_id}/course{course_id}', [AdminController::class, 'adminAccept']);
-        Route::put('/admin-dashboard-reject/customer{customer_id}/course{course_id}', [AdminController::class, 'adminReject']);
+        Route::get('/activities', [ActivityController::class, 'index']);
+        Route::get('/activities/{id}', [ActivityController::class, 'show']);
+
+        Route::middleware(['auth:sanctum'])->group(function () {
+            Route::resource('/slots', SlotController::class);
+            Route::resource('/courses', CourseController::class);
+            Route::get('/costumer-dashboard', [CustomerController::class, 'customerDashboard']);
+            Route::put('/costumer-dashboard-requiered/{id}', [CustomerController::class, 'customerRequired']);
+            Route::put('/costumer-dashboard-cancel/{id}', [CustomerController::class, 'customerCancel']);
+            Route::get('/admin-dashboard', [AdminController::class, 'adminDashboard']);
+            Route::put('/admin-dashboard-accept/customer{customer_id}/course{course_id}', [AdminController::class, 'adminAccept']);
+            Route::put('/admin-dashboard-reject/customer{customer_id}/course{course_id}', [AdminController::class, 'adminReject']);
+        });
     });

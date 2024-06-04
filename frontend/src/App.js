@@ -9,10 +9,12 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { LOGIN } from "./redux/action";
-import UserRoutes from "./protectedRoutes/UserRoutes";
 import GuestRoutes from "./protectedRoutes/GuestRoutes";
 import DashboardAdmin from "./pages/DashboardAdmin";
 import NotFount from "./pages/NotFound";
+import AdminRoutes from "./protectedRoutes/AdminRoutes";
+import CustomerRoutes from "./protectedRoutes/CustomerRoutes";
+import DashboardCunstomer from "./pages/DashboardCustomer";
 
 function App() {
   const dispatch = useDispatch();
@@ -45,8 +47,11 @@ function App() {
           {/* per proteggere le rotte, si possono fare rotte innestate */}
 
           {/* rotte accessibili se SEI loggato */}
-          <Route element={<UserRoutes />}>
+          <Route element={<AdminRoutes />}>
             <Route path="/dasboard-admin" element={<DashboardAdmin />} />
+          </Route>
+          <Route element={<CustomerRoutes />}>
+            <Route path="/dasboard-customer" element={<DashboardCunstomer />} />
           </Route>
           {/* rotte accessibili se NON sei loggato */}
 

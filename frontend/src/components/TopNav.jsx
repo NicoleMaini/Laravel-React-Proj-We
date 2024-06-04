@@ -13,6 +13,8 @@ function TopNav() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  console.log("sono lo user attuale", user);
+
   const logout = () => {
     axios
       .post("/logout")
@@ -28,22 +30,33 @@ function TopNav() {
         </Link>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
-          <Nav className="me-auto my-2 my-lg-0" style={{ maxHeight: "100px" }} navbarScroll>
+          <Nav className="mx-auto my-2 my-lg-0" style={{ maxHeight: "100px" }} navbarScroll>
             <Link to="/" className="nav-link">
               Home
             </Link>
-            <NavDropdown title="Link" id="navbarScrollingDropdown">
-              <Link className="dropdown-item" to="/dasboard-admin">
-                Dashboard
-              </Link>
-              <Link className="dropdown-item">Another action</Link>
-              <NavDropdown.Divider />
-              <Link className="dropdown-item">Something else here</Link>
-            </NavDropdown>
+            {user && user.role === "admin" && (
+              <NavDropdown title={user.name} id="navbarScrollingDropdown">
+                <Link className="dropdown-item" to="/dasboard-admin">
+                  Dashboard
+                </Link>
+                <Link className="dropdown-item">Courses</Link>
+                <NavDropdown.Divider />
+                <Link className="dropdown-item">Something else here</Link>
+              </NavDropdown>
+            )}
+            {user && user.role === "customer" && (
+              <NavDropdown title={user.name} id="navbarScrollingDropdown">
+                <Link className="dropdown-item" to="/dasboard-customer">
+                  Dashboard
+                </Link>
+                <Link className="dropdown-item">Courses</Link>
+                <NavDropdown.Divider />
+                <Link className="dropdown-item">Something else here</Link>
+              </NavDropdown>
+            )}
           </Nav>
           {user ? (
             <>
-              <span className="me-2">{user.name}</span>
               <Button variant="outline-danger" onClick={logout}>
                 Logout
               </Button>

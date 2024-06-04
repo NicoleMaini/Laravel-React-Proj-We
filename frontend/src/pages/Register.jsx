@@ -15,6 +15,8 @@ function Register() {
     password_confirmation: "",
   });
 
+  const [errors, setErrors] = useState(null);
+
   const updateInputValue = e => {
     setFormData(oldData => ({
       ...oldData,
@@ -32,8 +34,8 @@ function Register() {
       .then(resp => {
         navigate("/login");
       })
-      .catch(error => {
-        console.error("Si è verificato un errore:", error);
+      .catch(err => {
+        setErrors(err.response.data.errors); //gestione degli errori - da implementare con l'interfaccia
       });
   };
 

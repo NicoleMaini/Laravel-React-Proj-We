@@ -14,8 +14,7 @@ class CustomerController extends Controller
             abort(401);
         }
 
-        // $customer_id = Auth::user()->id;
-        $customer_id = 1;
+        $customer_id = Auth::user()->id;
 
         $inscription_courses = User::with('courses')->find($customer_id);
 
@@ -27,10 +26,10 @@ class CustomerController extends Controller
         if (Auth::user()->role !== 'customer') {
             abort(401);
         }
-        // $customer_id = User::find(1);
-        // $course_id = 2;
-        $customer = Auth::user();
-        $course_id = $id; // ID del corso che vuoi aggiornare
+        $customer = User::find(1);
+        $course_id = 2;
+        // $customer = Auth::user();
+        // $course_id = $id; // ID del corso che vuoi aggiornare
         $newStatus = 'pending';
         $pivot = $customer->courses()->where('course_id', $course_id)->first()->pivot;
         $pivot->status = $newStatus;
@@ -47,12 +46,14 @@ class CustomerController extends Controller
         // $customer_id = User::find(1);
         // $course_id = 2;
         $customer = Auth::user();
-        $course_id = $id; // ID del corso che vuoi aggiornare
-        $newStatus = 'false';
-        $pivot = $customer->courses()->where('course_id', $course_id)->first()->pivot;
-        $pivot->status = $newStatus;
-        $pivot->save();
+        $customer->courses()->detach($id);
+        $customer->users()->detach(Auth::user()->id);
+        // $course_id = $id; // ID del corso che vuoi aggiornare
+        // $newStatus = 'false';
+        // $pivot = $customer->courses()->where('course_id', $course_id)->first()->pivot;
+        // $pivot->status = $newStatus;
+        // $pivot->save();
 
-        return $pivot;
+        return $customer;
     }
 }
