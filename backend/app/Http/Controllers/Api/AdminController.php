@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\User;
+use App\Models\Activity;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -17,9 +18,60 @@ class AdminController extends Controller
 
         $courses = User::whereHas('courses', function ($query) {
             $query->whereIn('course_user.status', ['pending', 'true']);
-        })->get();
+        })
+            ->with([
+                'courses' => function ($query) {
+                    $query->whereIn('course_user.status', ['pending', 'true'])->select('courses.*', 'course_user.status');
+                },
+            ])
+            ->get();
+        $result = $courses->map(function ($user) {
+            return [
+                'id' => $user->id,
+                'name' => $user->name,
+                'genre' => $user->genre,
+                'telephone' => $user->telephone,
+                'email' => $user->email,
+                'courses' => $user->courses
+                    ->map(function ($course) {
+                        $activity = Activity::with('courses', 'courses.slot')->find($course->id);
+                        // Assicurati che l'istanza di Activity sia stata recuperata correttamente
+                        if ($activity) {
+                            // Ora puoi accedere al nome del corso tramite la relazione Activity
+                            return [
+                                'id' => $course->id,
+                                'name' => $activity->name,
+                                'status' => $course->pivot->status,
+                            ];
+                        } else {
+                            // Nel caso in cui l'istanza di Activity non sia stata trovata
+                            return null; // o un valore di default a tua scelta
+                        }
+                    })
+                    ->filter(), // Rimuovi eventuali valori null dalla mappatura dei corsi
+            ];
+        });
 
-        return $courses;
+        // Trasforma i risultati per includere `status` direttamente
+        // $result = $courses->map(function ($user) {
+        //     return [
+        //         'id' => $user->id,
+        //         'name' => $user->name,
+        //         'genre' => $user->genre,
+        //         'telephone' => $user->telephone,
+        //         'email' => $user->email,
+        //         'courses' => $user->courses->map(function ($course) {
+        // return [
+        //     'id' => $course->id,
+        //     'name' => Activity::with('courses', 'courses.slot')->find($course->id),
+        //     'status' => $course->pivot->status,
+        // ];
+
+        //     }),
+        // ];
+        // });
+
+        return json_encode($result, JSON_PRETTY_PRINT);
     }
     public function adminAccept($customer_id, $course_id)
     {
