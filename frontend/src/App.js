@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import Home from "./pages/Home";
@@ -12,6 +12,7 @@ import { LOGIN } from "./redux/action";
 import UserRoutes from "./protectedRoutes/UserRoutes";
 import GuestRoutes from "./protectedRoutes/GuestRoutes";
 import DashboardAdmin from "./pages/DashboardAdmin";
+import NotFount from "./pages/NotFound";
 
 function App() {
   const dispatch = useDispatch();
@@ -45,7 +46,7 @@ function App() {
 
           {/* rotte accessibili se SEI loggato */}
           <Route element={<UserRoutes />}>
-            <Route path="/dasboardAdmin" element={<DashboardAdmin />} />
+            <Route path="/dasboard-admin" element={<DashboardAdmin />} />
           </Route>
           {/* rotte accessibili se NON sei loggato */}
 
@@ -53,6 +54,26 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
           </Route>
+
+          <Route path="/404-page-not-found" element={<NotFount />} />
+          <Route path="*" element={<Navigate to="/404" />} />
+          {/* per ovviare al problema che le pagine effettivamente esistenti non vengono catturate dal path '*' 
+          
+            <Route path="/404" element={<NotFound />} />
+           
+            useEffect(() => {
+                fetch(`/api/v1/faculties/${id}`)
+                .then((res) => {
+                    if (!res.ok) navigate('/404');
+                    return res.json();})
+                .then((data) => setFaculty(data.data));
+                }, [id]);
+
+                con axios 
+                catch (error) {
+                  // Gestisci l'errore, ad esempio reindirizzando a /404
+                  navigate('/404');
+          */}
         </Routes>
       </BrowserRouter>
     )

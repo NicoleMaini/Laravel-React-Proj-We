@@ -33,7 +33,9 @@ function TopNav() {
               Home
             </Link>
             <NavDropdown title="Link" id="navbarScrollingDropdown">
-              <Link className="dropdown-item">Action</Link>
+              <Link className="dropdown-item" to="/dasboard-admin">
+                Dashboard
+              </Link>
               <Link className="dropdown-item">Another action</Link>
               <NavDropdown.Divider />
               <Link className="dropdown-item">Something else here</Link>
