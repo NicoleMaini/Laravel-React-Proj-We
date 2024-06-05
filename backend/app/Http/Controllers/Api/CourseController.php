@@ -14,8 +14,30 @@ class CourseController extends Controller
      */
     public function index()
     {
-        $courses = Course::with('activity', 'slot')->get();
-        return $courses;
+        $courses = Course::with([
+            'activity',
+            'slot',
+            'users' => function ($query) {
+                $query->select('users.id', 'course_user.status');
+            },
+        ])->get();
+
+        // Riformatta i dati per includere solo i campi necessari
+        $result = $courses->map(function ($course) {
+            return [
+                'course_id' => $course->id,
+                'activity' => $course->activity,
+                'slot' => $course->slot,
+                'users' => $course->users->map(function ($user) {
+                    return [
+                        'user_id' => $user->id,
+                        'status' => $user->pivot->status,
+                    ];
+                }),
+            ];
+        });
+
+        return response()->json($result);
     }
 
     /**

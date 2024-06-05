@@ -10,6 +10,7 @@ import { LOGOUT } from "../redux/action";
 
 function TopNav() {
   const user = useSelector(state => state.user);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -34,24 +35,27 @@ function TopNav() {
             <Link to="/" className="nav-link">
               Home
             </Link>
-            {user && user.role === "admin" && (
+            {user && (
               <NavDropdown title={user.name} id="navbarScrollingDropdown">
-                <Link className="dropdown-item" to="/dasboard-admin">
-                  Dashboard
-                </Link>
-                <Link className="dropdown-item">Courses</Link>
-                <NavDropdown.Divider />
-                <Link className="dropdown-item">Something else here</Link>
-              </NavDropdown>
-            )}
-            {user && user.role === "customer" && (
-              <NavDropdown title={user.name} id="navbarScrollingDropdown">
-                <Link className="dropdown-item" to="/dasboard-customer">
-                  Dashboard
-                </Link>
-                <Link className="dropdown-item">Courses</Link>
-                <NavDropdown.Divider />
-                <Link className="dropdown-item">Something else here</Link>
+                {user.role === "admin" ? (
+                  <>
+                    <Link className="dropdown-item" to="/dasboard-admin">
+                      Dashboard
+                    </Link>
+                    <Link className="dropdown-item">Courses</Link>
+                    <NavDropdown.Divider />
+                    <Link className="dropdown-item">Something else here</Link>
+                  </>
+                ) : user.role === "customer" ? (
+                  <>
+                    <Link className="dropdown-item" to="/dasboard-customer">
+                      Dashboard
+                    </Link>
+                    <Link className="dropdown-item">Courses</Link>
+                    <NavDropdown.Divider />
+                    <Link className="dropdown-item">Something else here</Link>
+                  </>
+                ) : null}
               </NavDropdown>
             )}
           </Nav>

@@ -21,6 +21,8 @@ function DashboardAdmin() {
       .then(resp => setReload(!reload));
   };
 
+  console.log(courses);
+
   return (
     <>
       <h1 className="text-center">Courses</h1>
@@ -48,22 +50,24 @@ function DashboardAdmin() {
                   <td>{course.telephone}</td>
                   <td>{course.courses[0].name}</td>
                   <td>
-                    {course.courses[0].status === "true" ? (
-                      <>
-                        <span className="me-2">Admitted</span>
-                        <Button variant="outline-danger" onClick={() => reject(course.id, course.courses[0].id)}>
-                          Expel
-                        </Button>
-                      </>
-                    ) : (
-                      <>
-                        <Button variant="success" onClick={accept}>
-                          Accept
-                        </Button>
-                        <Button variant="outline-danger" onClick={reject}>
-                          Reject
-                        </Button>
-                      </>
+                    {course.courses.map((course, i) =>
+                      course.status === "true" ? (
+                        <>
+                          <span className="me-2">Admitted</span>
+                          <Button variant="outline-danger" onClick={() => reject(course.id, course.id)}>
+                            Expel
+                          </Button>
+                        </>
+                      ) : (
+                        <>
+                          <Button variant="success" onClick={() => accept(course.id, course.id)}>
+                            Accept
+                          </Button>
+                          <Button variant="outline-danger" onClick={() => reject(course.id, course.id)}>
+                            Reject
+                          </Button>
+                        </>
+                      )
                     )}
                   </td>
                 </tr>

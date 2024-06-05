@@ -13,6 +13,7 @@ function Register() {
     email: "",
     password: "",
     password_confirmation: "",
+    role: "customer",
   });
 
   const [errors, setErrors] = useState(null);
